@@ -32,26 +32,25 @@ class APIService: NSObject {
     }
     
     
-    func changeDataType<T>(Data: T) -> T?{
-        if let data = Data as? URLRequest {
-            return data as? T
-        }
-        
-        if let url = Data as? URL {
-            return url as? T
-        }
-        
-        return nil
-        
-    }
+//    func changeDataType<T>(Data: T) -> T?{
+//        if let data = Data as? URLRequest {
+//            return data as? T
+//        }
+//
+//        if let url = Data as? URL {
+//            return url as? T
+//        }
+//
+//        return nil
+//
+//    }
+//
     
     
-    
-    func getMethod<T>(request: T, completionBlk: @escaping(Result<AnyObject>) -> ()) -> URLSessionDataTask {
+    func getMethod (request: URLRequest, completionBlk: @escaping(Result<AnyObject>) -> ()) -> URLSessionDataTask {
+
         
-        let data = changeDataType(Data: request)
-        
-        let task = session.dataTask(with: request as! URLRequest) { (data, response, error) in
+        let task = session.dataTask(with: request ) { (data, response, error) in
             guard error == nil else {print("Error 😩");return}
             guard let data = data else {print("data😩");return}
             
@@ -61,6 +60,27 @@ class APIService: NSObject {
             }
             
             self.convertDataToObject(data, completionBlk: completionBlk)
+            
+        }
+        
+        task.resume()
+        
+        return task
+    }
+    
+    func getMethodForURL (urlType: URL, completionBlk: @escaping(Result<Data>) -> ()) -> URLSessionDataTask {
+        
+        
+        let task = session.dataTask(with: urlType ) { (data, response, error) in
+            guard error == nil else {completionBlk(.Error(error!.localizedDescription));return}
+            guard let data = data else {completionBlk(.Error(error!.localizedDescription));return}
+            completionBlk(.Success(data))
+//            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+//                completionBlk(.Error("Error :( status code -> \((response as! HTTPURLResponse).statusCode)"))
+//                return
+//            }
+//
+//            self.convertDataToObject(data, completionBlk: completionBlk)
             
         }
         
@@ -135,7 +155,27 @@ class APIService: NSObject {
         }
     }
     
-    func getSingleImage(urlString: URL) {
+    func getSingleImage(url: URL, completion: @escaping(Result<Data>) -> ()) {
+        
+        let _ = getMethodForURL (urlType: url) { (response) in
+            switch response {
+            case .Success(let data):
+                //guard let imageData = data  else {return}
+              
+                DispatchQueue.main.async {
+                    completion(.Success(data))
+                }
+                
+                
+            case .Error(let error):
+                
+                DispatchQueue.main.async {
+                    completion(.Error(error))
+                }
+                
+                break
+            }
+        }
         
     }
     

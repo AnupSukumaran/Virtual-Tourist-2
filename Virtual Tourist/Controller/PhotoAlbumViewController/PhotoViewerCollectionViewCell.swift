@@ -14,9 +14,18 @@ class PhotoViewerCollectionViewCell: UICollectionViewCell {
     
     func config(galleryData: GalleryModel) {
         
-        let url = galleryData.url_m ?? "URL not found"
-        print("url = \(url)")
+        let urlString = galleryData.url_m ?? "URL not found"
+        print("url = \(urlString)")
+        guard let url = URL(string: urlString) else {return}
         
+        APIService.shared.getSingleImage(url: url) { (data) in
+            switch data {
+            case .Success(let data):
+                self.ImageViewer.image = UIImage(data: data)
+            case .Error(let error):
+                print("Error = \(error)")
+            }
+        }
     }
     
 }
