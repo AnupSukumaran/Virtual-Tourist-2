@@ -152,7 +152,11 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
             vc.long = dict["long"] as? Double
             vc.zlat = dict["zLat"] as? Double
             vc.zlong = dict["zLong"] as? Double
-
+              if let pin = sharedFunc.loadPin(latitude: dict["lat"] as! Double, longitude: dict["long"] as! Double) {
+                vc.pin = pin
+            }
+            
+            
         }
         } else {print("Failed Casting")}
     }

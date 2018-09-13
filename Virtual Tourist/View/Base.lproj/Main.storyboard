@@ -91,7 +91,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="JCQ-ih-sOw">
-                                <rect key="frame" x="0.0" y="88" width="375" height="690"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="630"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TAl-KG-9Sm">
                                     <size key="itemSize" width="150" height="150"/>
@@ -129,13 +129,28 @@
                                     <outlet property="delegate" destination="b9F-6d-rNF" id="ZLA-iI-635"/>
                                 </connections>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mtK-4f-MI0">
+                                <rect key="frame" x="0.0" y="718" width="375" height="60"/>
+                                <color key="backgroundColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.77647058820000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="Nwm-LG-4Xu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <state key="normal" title="New Collection"/>
+                                <connections>
+                                    <action selector="newCollection:" destination="b9F-6d-rNF" eventType="touchUpInside" id="myM-nz-VMg"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="JCQ-ih-sOw" firstAttribute="leading" secondItem="top-HE-Z7x" secondAttribute="leading" id="Kqe-4T-PkV"/>
-                            <constraint firstItem="top-HE-Z7x" firstAttribute="bottom" secondItem="JCQ-ih-sOw" secondAttribute="bottom" id="R0w-3N-7Hf"/>
-                            <constraint firstItem="top-HE-Z7x" firstAttribute="trailing" secondItem="JCQ-ih-sOw" secondAttribute="trailing" id="dIg-Z2-nea"/>
-                            <constraint firstItem="JCQ-ih-sOw" firstAttribute="top" secondItem="top-HE-Z7x" secondAttribute="top" id="gEt-Dr-AkI"/>
+                            <constraint firstItem="mtK-4f-MI0" firstAttribute="leading" secondItem="top-HE-Z7x" secondAttribute="leading" id="3Qn-eC-vc5"/>
+                            <constraint firstItem="top-HE-Z7x" firstAttribute="bottom" secondItem="mtK-4f-MI0" secondAttribute="bottom" id="6ma-rP-lYP"/>
+                            <constraint firstItem="top-HE-Z7x" firstAttribute="trailing" secondItem="mtK-4f-MI0" secondAttribute="trailing" id="Ic1-3G-59b"/>
+                            <constraint firstItem="mtK-4f-MI0" firstAttribute="top" secondItem="JCQ-ih-sOw" secondAttribute="bottom" id="IfK-od-J8f"/>
+                            <constraint firstItem="JCQ-ih-sOw" firstAttribute="top" secondItem="top-HE-Z7x" secondAttribute="top" id="hou-Bi-geK"/>
+                            <constraint firstItem="JCQ-ih-sOw" firstAttribute="trailing" secondItem="top-HE-Z7x" secondAttribute="trailing" id="jsf-Uq-W6T"/>
+                            <constraint firstItem="JCQ-ih-sOw" firstAttribute="leading" secondItem="top-HE-Z7x" secondAttribute="leading" id="yln-ua-NuI"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="top-HE-Z7x"/>
                     </view>

@@ -10,6 +10,7 @@ import UIKit
 
 class PhotoViewerCollectionViewCell: UICollectionViewCell {
     
+    var dataController: DataController!
     @IBOutlet weak var ImageViewer: UIImageView!
     
     func config(galleryData: GalleryModel) {
@@ -22,10 +23,20 @@ class PhotoViewerCollectionViewCell: UICollectionViewCell {
             switch data {
             case .Success(let data):
                 self.ImageViewer.image = UIImage(data: data)
+                
+                let photo = Photo(context: self.dataController.viewContext)
+                photo.image = data
+                CommonFunc.shared.saved()
+                
             case .Error(let error):
                 print("Error = \(error)")
             }
         }
+    }
+    
+    func coreConfig(photo: Photo) {
+        guard let imaged = photo.image else {print("coreImage😩");return}
+        self.ImageViewer.image = UIImage(data: imaged)
     }
     
 }
