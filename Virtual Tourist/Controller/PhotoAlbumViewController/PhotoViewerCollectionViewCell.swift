@@ -10,7 +10,7 @@ import UIKit
 
 class PhotoViewerCollectionViewCell: UICollectionViewCell {
     
-    var dataController: DataController!
+   // var dataController: DataController!
     @IBOutlet weak var ImageViewer: UIImageView!
     
     func config(galleryData: GalleryModel) {
@@ -24,7 +24,7 @@ class PhotoViewerCollectionViewCell: UICollectionViewCell {
             case .Success(let data):
                 self.ImageViewer.image = UIImage(data: data)
                 
-                let photo = Photo(context: self.dataController.viewContext)
+                let photo = Photo(context: CommonFunc.shared.dataController.viewContext)
                 photo.image = data
                 CommonFunc.shared.saved()
                 

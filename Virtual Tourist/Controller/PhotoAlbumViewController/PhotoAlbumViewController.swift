@@ -30,7 +30,7 @@ class PhotoAlbumViewController: UIViewController {
         updateFlowLayout(view.frame.size)
         
         callingAPI()
-       // setupFetchResultsControllerMethod()
+        setupFetchResultsControllerMethod()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -38,24 +38,24 @@ class PhotoAlbumViewController: UIViewController {
         fetchResultsController = nil
     }
     
-//    fileprivate func setupFetchResultsControllerMethod() {
-//        let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
-//        let predicate = NSPredicate(format: "pin == %@", pin)
-//        fetchRequest.predicate = predicate
-//        let sortDescriptor = NSSortDescriptor(key: "image", ascending: false)
-//        fetchRequest.sortDescriptors = [sortDescriptor]
-//        
-//        fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "\(pin.latitude)")
-//        
-//        fetchResultsController.delegate = self
-//        
-//        do {
-//            try fetchResultsController.performFetch()
-//        } catch let error {
-//             callingAPI()
-//            print("Error = \(error.localizedDescription )")
-//        }
-//    }
+    fileprivate func setupFetchResultsControllerMethod() {
+        let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+        let predicate = NSPredicate(format: "pin == %@", pin)
+        fetchRequest.predicate = predicate
+        let sortDescriptor = NSSortDescriptor(key: "image", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "\(pin.latitude)")
+        
+        fetchResultsController.delegate = self
+        
+        do {
+            try fetchResultsController.performFetch()
+        } catch let error {
+             callingAPI()
+            print("Error = \(error.localizedDescription )")
+        }
+    }
     
     func callingAPI() {
         sharedFunc.callingAPI(lat: lat ?? 0.0, long: long ?? 0.0, selfClass: self) {
@@ -114,43 +114,45 @@ extension PhotoAlbumViewController: UICollectionViewDataSource, UICollectionView
     
 }
 
-//extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
-//
-//    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        collectionViewer.be
-//    }
-//
-//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        tableView.endUpdates()
-//    }
-//
-//
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-//        let indexSet = IndexSet(integer: sectionIndex)
-//
-//        switch type {
-//        case .insert: tableView.insertSections(indexSet, with: .fade)
-//        case .delete: tableView.deleteSections(indexSet, with: .fade)
-//        case .update: fatalError("Not possible")
-//        default:
-//            break
-//        }
-//    }
-//
-//
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//
-//        switch type {
-//        case .insert:
-//            tableView.insertRows(at: [newIndexPath!], with: .fade)
-//        case .delete:
-//            tableView.deleteRows(at: [indexPath!], with: .fade)
-//        case .update:
-//            tableView.reloadRows(at: [indexPath!], with: .fade)
-//        case .move:
-//            tableView.moveRow(at: indexPath!, to: newIndexPath!)
-//        }
-//
-//    }
-//
-//}
+extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
+
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+       // collectionViewer.be
+      //  collectionViewer.
+    }
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+      //  tableView.endUpdates()
+    }
+
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        let indexSet = IndexSet(integer: sectionIndex)
+
+        switch type {
+        case .insert: collectionViewer.insertSections(indexSet)
+        case .delete: collectionViewer.deleteSections(indexSet)
+        case .update: fatalError("Not possible")
+        default:
+            break
+        }
+    }
+
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+        switch type {
+        case .insert:
+            collectionViewer.insertItems(at: [indexPath!])
+        case .delete:
+            collectionViewer.deleteItems(at: [indexPath!])
+        case .update:
+            collectionViewer.reloadItems(at: [indexPath!])
+        case .move:
+          //  collectionViewer.moveRow(at: indexPath!, to: newIndexPath!)
+            collectionViewer.moveItem(at: indexPath!, to: newIndexPath!)
+        }
+
+    }
+
+}
