@@ -25,6 +25,7 @@
 		5A5C73512146BD7100F2F95F /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C73502146BD7100F2F95F /* AlertView.swift */; };
 		5A5C73532146C17700F2F95F /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C73522146C17600F2F95F /* PhotoAlbumViewController.swift */; };
 		5A5C73552146C3B800F2F95F /* PhotoViewerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C73542146C3B800F2F95F /* PhotoViewerCollectionViewCell.swift */; };
+		5AF49439214E88D1001346A5 /* PhotosCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF49438214E88D1001346A5 /* PhotosCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		5A5C73502146BD7100F2F95F /* AlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		5A5C73522146C17600F2F95F /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		5A5C73542146C3B800F2F95F /* PhotoViewerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerCollectionViewCell.swift; sourceTree = "<group>"; };
+		5AF49438214E88D1001346A5 /* PhotosCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 			children = (
 				5A15665C214530740046C420 /* AppDelegate.swift */,
 				5A5C73502146BD7100F2F95F /* AlertView.swift */,
+				5A156663214530740046C420 /* Virtual_Tourist.xcdatamodeld */,
 				5A5C73432146A02C00F2F95F /* Networking */,
 				5A5C733E2146762E00F2F95F /* Functions */,
 				5A1566752145612C0046C420 /* Model */,
@@ -90,7 +93,6 @@
 				5A156666214530770046C420 /* Assets.xcassets */,
 				5A156668214530770046C420 /* LaunchScreen.storyboard */,
 				5A15666B214530770046C420 /* Info.plist */,
-				5A156663214530740046C420 /* Virtual_Tourist.xcdatamodeld */,
 			);
 			path = "Virtual Tourist";
 			sourceTree = "<group>";
@@ -147,6 +149,7 @@
 			children = (
 				5A5C73522146C17600F2F95F /* PhotoAlbumViewController.swift */,
 				5A5C73542146C3B800F2F95F /* PhotoViewerCollectionViewCell.swift */,
+				5AF49438214E88D1001346A5 /* PhotosCollectionViewController.swift */,
 			);
 			path = PhotoAlbumViewController;
 			sourceTree = "<group>";
@@ -229,6 +232,7 @@
 				5A5C734C2146AA2300F2F95F /* ResultEnum.swift in Sources */,
 				5A5C734F2146AD3B00F2F95F /* Constants.swift in Sources */,
 				5A5C73512146BD7100F2F95F /* AlertView.swift in Sources */,
+				5AF49439214E88D1001346A5 /* PhotosCollectionViewController.swift in Sources */,
 				5A5685BE2148280A00C3A3A9 /* ModelClassResponse.swift in Sources */,
 				5A156672214530DE0046C420 /* TravelLocationsMapViewController.swift in Sources */,
 				5A3E053321481D0500C21584 /* GalleryModel.swift in Sources */,

@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import UIKit
 
 extension CommonFunc {
     
     
     
-    func callingAPI(lat: Double, long: Double, selfClass: AnyObject, completion: @escaping() -> ()) {
-        guard let selfVC = selfClass as? PhotoAlbumViewController else {return}
+    func callingAPI(lat: Double, long: Double, selfVC: UIViewController, completion: @escaping() -> ()) {
+        
         APIService.shared.getAllImages(lat: lat, long: long) { (response) in
             switch response {
             case .Success(let data):

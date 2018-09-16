@@ -116,6 +116,7 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        print("selecting")
         guard let annotation = view.annotation else {return}
         let zoom = mapView.region.span
        
@@ -140,6 +141,10 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
             print("non-editing mode")
             performSegue(withIdentifier: "showVC", sender: dataDict)
         }
+       
+         let selectedAnnotations = mapView.selectedAnnotations
+        let _ = selectedAnnotations.map{mapView.deselectAnnotation($0, animated: true)}
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -154,6 +159,7 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
             vc.zlong = dict["zLong"] as? Double
               if let pin = sharedFunc.loadPin(latitude: dict["lat"] as! Double, longitude: dict["long"] as! Double) {
                 vc.pin = pin
+                //vc.dataController = dataController
             }
             
             

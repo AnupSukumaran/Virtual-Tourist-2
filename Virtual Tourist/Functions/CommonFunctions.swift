@@ -34,7 +34,7 @@ class CommonFunc: NSObject {
         let zoomSpan:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: zLatitude, longitudeDelta: zLongitude)
         let location:CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude, longitude)
         let region:MKCoordinateRegion = MKCoordinateRegionMake(location, zoomSpan)
-        mapView.setRegion(region, animated: true)
+        mapView.setRegion(region, animated: false)
         
     }
     
@@ -124,13 +124,18 @@ class CommonFunc: NSObject {
     }
     
     func saved() {
-        do{
-            try dataController.viewContext.save()
-            // pins.insert(pin, at: 0)
-            print("Saved Pin😛")
-        }catch let error{
-            print(" Error😩 = \(error.localizedDescription)")
+        if dataController.viewContext.hasChanges {
+            do{
+                try dataController.viewContext.save()
+                // pins.insert(pin, at: 0)
+                print("Saved Pin😛")
+            }catch let error{
+                print(" Error😩 = \(error.localizedDescription)")
+            }
+        } else {
+            print("No Changes in nsmanagedobjectcontext")
         }
+        
     }
     
 }
