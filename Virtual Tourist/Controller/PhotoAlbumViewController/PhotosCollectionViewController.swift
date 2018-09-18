@@ -9,6 +9,8 @@
 import UIKit
 import CoreData
 
+
+
 private let reuseIdentifier = "PhotoViewerCollectionViewCell"
 
 class PhotosCollectionViewController: UICollectionViewController {
@@ -28,12 +30,17 @@ class PhotosCollectionViewController: UICollectionViewController {
      var blockOperations: [BlockOperation] = []
     
     let sectionInsets = UIEdgeInsets(top: 3.0, left: 3.0, bottom: 3.0, right: 3.0)
-
+    
+    var photoAlbum =  PhotoAlbumViewController()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("Pin = \(pin.latitude)")
         self.postingNotificationForDeviceOrientations()
-       
+        
+        photoAlbum.delegate = self
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -176,6 +183,15 @@ class PhotosCollectionViewController: UICollectionViewController {
         
         return cell
     }
+    
+   override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath)
+        if cell?.isSelected == true {
+         cell?.backgroundColor = UIColor.gray
+        } else {
+            cell?.backgroundColor = UIColor.clear
+        }
+    }
 
     
 }
@@ -265,13 +281,13 @@ extension PhotosCollectionViewController: NSFetchedResultsControllerDelegate {
 //            }
             
         case .delete:
-//            deletedIndexPaths.append(indexPath!)
+            deletedIndexPaths.append(indexPath!)
 //            break
-            collectionView?.deleteItems(at: [indexPath!])
+          //  collectionView?.deleteItems(at: [indexPath!])
         case .update:
-//            updatedIndexPaths.append(indexPath!)
+            updatedIndexPaths.append(indexPath!)
 //            break
-            collectionView?.reloadItems(at: [indexPath!])
+            //collectionView?.reloadItems(at: [indexPath!])
             
         case .move:
             print("Move an item. We don't expect to see this in this app.")
@@ -315,6 +331,15 @@ extension PhotosCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return sectionInsets.left
     }
+    
+}
+
+extension PhotosCollectionViewController: NewCollectionDelegate {
+    func clearForNewCollection() {
+        print("delegateWorks")
+        callNewCollectionAction()
+    }
+    
     
 }
 

@@ -26,6 +26,7 @@
 		5A5C73532146C17700F2F95F /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C73522146C17600F2F95F /* PhotoAlbumViewController.swift */; };
 		5A5C73552146C3B800F2F95F /* PhotoViewerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C73542146C3B800F2F95F /* PhotoViewerCollectionViewCell.swift */; };
 		5AF49439214E88D1001346A5 /* PhotosCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF49438214E88D1001346A5 /* PhotosCollectionViewController.swift */; };
+		5AFDD3AE2150026D003AEA3D /* NewCollectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFDD3AD2150026D003AEA3D /* NewCollectionDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		5A5C73522146C17600F2F95F /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		5A5C73542146C3B800F2F95F /* PhotoViewerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerCollectionViewCell.swift; sourceTree = "<group>"; };
 		5AF49438214E88D1001346A5 /* PhotosCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewController.swift; sourceTree = "<group>"; };
+		5AFDD3AD2150026D003AEA3D /* NewCollectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCollectionDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 			children = (
 				5A5C733F2146764F00F2F95F /* CommonFunctions.swift */,
 				5A5685BF21482E1D00C3A3A9 /* CommonFunctions+Extension.swift */,
+				5AFDD3AD2150026D003AEA3D /* NewCollectionDelegate.swift */,
 			);
 			path = Functions;
 			sourceTree = "<group>";
@@ -229,6 +232,7 @@
 				5A5C73402146764F00F2F95F /* CommonFunctions.swift in Sources */,
 				5A156674214555CE0046C420 /* DataController.swift in Sources */,
 				5A5C734D2146AA2300F2F95F /* TypeAliases.swift in Sources */,
+				5AFDD3AE2150026D003AEA3D /* NewCollectionDelegate.swift in Sources */,
 				5A5C734C2146AA2300F2F95F /* ResultEnum.swift in Sources */,
 				5A5C734F2146AD3B00F2F95F /* Constants.swift in Sources */,
 				5A5C73512146BD7100F2F95F /* AlertView.swift in Sources */,

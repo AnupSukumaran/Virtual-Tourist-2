@@ -163,23 +163,31 @@
                                     <rect key="frame" x="0.0" y="0.0" width="308" height="243"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qkl-o0-tA7">
+                                            <rect key="frame" x="0.0" y="0.0" width="308" height="0.0"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </view>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Image" translatesAutoresizingMaskIntoConstraints="NO" id="t0m-Yg-zuO">
                                             <rect key="frame" x="0.0" y="0.0" width="308" height="243"/>
                                         </imageView>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="SxD-ga-Uf4">
-                                            <rect key="frame" x="144" y="-10" width="20" height="20"/>
+                                            <rect key="frame" x="144" y="0.0" width="20" height="0.0"/>
                                         </activityIndicatorView>
                                     </subviews>
                                 </view>
                                 <color key="backgroundColor" red="0.66081059644670048" green="0.66081059644670048" blue="0.66081059644670048" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="t0m-Yg-zuO" firstAttribute="centerY" secondItem="SQH-Ni-wsg" secondAttribute="centerY" id="36i-Gl-Lqd"/>
+                                    <constraint firstItem="qkl-o0-tA7" firstAttribute="top" secondItem="SxD-ga-Uf4" secondAttribute="bottom" id="5cG-8C-1u7"/>
                                     <constraint firstItem="SxD-ga-Uf4" firstAttribute="centerX" secondItem="SQH-Ni-wsg" secondAttribute="centerX" id="DHr-dR-DRU"/>
+                                    <constraint firstAttribute="bottom" secondItem="qkl-o0-tA7" secondAttribute="bottom" id="Sk6-mW-nuC"/>
                                     <constraint firstItem="SxD-ga-Uf4" firstAttribute="centerY" secondItem="SQH-Ni-wsg" secondAttribute="centerY" id="Uhx-AT-jKN"/>
                                     <constraint firstAttribute="trailing" secondItem="t0m-Yg-zuO" secondAttribute="trailing" id="arn-vp-Ssv"/>
                                     <constraint firstAttribute="bottom" secondItem="t0m-Yg-zuO" secondAttribute="bottom" id="d8t-zP-6ux"/>
                                     <constraint firstItem="t0m-Yg-zuO" firstAttribute="leading" secondItem="SQH-Ni-wsg" secondAttribute="leading" id="ff1-vU-k7r"/>
                                     <constraint firstItem="t0m-Yg-zuO" firstAttribute="centerX" secondItem="SQH-Ni-wsg" secondAttribute="centerX" id="oKv-JS-oJL"/>
+                                    <constraint firstAttribute="trailing" secondItem="qkl-o0-tA7" secondAttribute="trailing" id="pBQ-5d-1i4"/>
+                                    <constraint firstItem="qkl-o0-tA7" firstAttribute="leading" secondItem="SQH-Ni-wsg" secondAttribute="leading" id="pWH-fG-kRh"/>
                                     <constraint firstItem="t0m-Yg-zuO" firstAttribute="top" secondItem="SQH-Ni-wsg" secondAttribute="top" id="r8v-bg-M8V"/>
                                 </constraints>
                                 <size key="customSize" width="308" height="243"/>
