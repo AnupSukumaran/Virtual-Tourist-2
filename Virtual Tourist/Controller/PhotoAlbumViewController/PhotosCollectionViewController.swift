@@ -9,7 +9,9 @@
 import UIKit
 import CoreData
 
-
+protocol SelectionCollectionDelegate: class {
+    func delectedSelectedCell(hasSelection: Bool)
+}
 
 private let reuseIdentifier = "PhotoViewerCollectionViewCell"
 
@@ -17,6 +19,8 @@ class PhotosCollectionViewController: UICollectionViewController {
     
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
+    
+    weak var delegate: SelectionCollectionDelegate?
     var dataController: DataController = CommonFunc.shared.dataController
     let sharedFunc = CommonFunc.shared
     var pin:Pins!
@@ -27,19 +31,22 @@ class PhotosCollectionViewController: UICollectionViewController {
     var deletedIndexPaths: [IndexPath]!
     var updatedIndexPaths: [IndexPath]!
     
-     var blockOperations: [BlockOperation] = []
+    var blockOperations: [BlockOperation] = []
     
     let sectionInsets = UIEdgeInsets(top: 3.0, left: 3.0, bottom: 3.0, right: 3.0)
+     var selectedPhotos = [Photo]()
     
-    var photoAlbum =  PhotoAlbumViewController()
+    weak var photoAlbum: PhotoAlbumViewController!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Pin = \(pin.latitude)")
+ 
         self.postingNotificationForDeviceOrientations()
         
-        photoAlbum.delegate = self
+        photoAlbum!.delegate = self
+        collectionView?.allowsMultipleSelection = true
+        
         
     }
     
@@ -49,14 +56,10 @@ class PhotosCollectionViewController: UICollectionViewController {
         setupFetchedResultControllerWith(pin)
         if let photos = pin.photos, photos.count == 0 {
             callingAPI()
-            pirntaction()
-        } else {
-            print("PicCount = \(pin.photos!.count)")
+            
         }
     }
-    func pirntaction() {
-        print("Hello")
-    }
+  
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
       //  fetchResultsController = nil
@@ -71,7 +74,7 @@ class PhotosCollectionViewController: UICollectionViewController {
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         // Create the FetchedResultsController
-        fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CommonFunc.shared.dataController.viewContext, sectionNameKeyPath: nil, cacheName: "\(pin.latitude)")
+        fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "\(pin.latitude)")
         fetchResultsController.delegate = self
         
         
@@ -110,34 +113,49 @@ class PhotosCollectionViewController: UICollectionViewController {
     }
     
     func saveImagesinCore(galleryData: GalleryModel) {
-        let urlString = galleryData.url_m ?? "URL not found"
-        print("url = \(urlString)")
-        guard let url = URL(string: urlString) else {return}
         
-        APIService.shared.getSingleImage(url: url) { (data) in
-            switch data {
-            case .Success(let data):
-                
-                let photo = Photo(context: self.sharedFunc.dataController.viewContext)
-                photo.image = data
-                photo.imageUrl = galleryData.url_m
-                photo.title = galleryData.title
-                photo.pin = self.pin
-                
-                self.sharedFunc.saved()
-                
-                
-                
-            case .Error(let error):
-                print("Error = \(error)")
-            }
-        }
+    
+        let photo = Photo(context: dataController.viewContext)
+        photo.imageUrl = galleryData.url_m
+        photo.title = galleryData.title
+        photo.pin = self.pin
+        
+        self.sharedFunc.saved()
+        
+//        APIService.shared.getSingleImage(url: url) { (data) in
+//            switch data {
+//            case .Success(let data):
+//
+//                let photo = Photo(context: self.sharedFunc.dataController.viewContext)
+//                photo.image = data
+//                photo.imageUrl = galleryData.url_m
+//                photo.title = galleryData.title
+//                photo.pin = self.pin
+//
+//                self.sharedFunc.saved()
+//
+//
+//
+//            case .Error(let error):
+//                print("Error = \(error)")
+//            }
+//        }
     }
     
     func callNewCollectionAction() {
-        let _ = fetchResultsController.fetchedObjects!.map{ sharedFunc.dataController.viewContext.delete($0)}
+        let _ = fetchResultsController.fetchedObjects!.map{ dataController.viewContext.delete($0)}
         sharedFunc.saved()
         callingAPI()
+    }
+    
+    func deleteOnlySelectedCell() {
+        print("deleteSelctedCells")
+        for items in selectedPhotos {
+            dataController.viewContext.delete(items)
+            sharedFunc.saved()
+        }
+        selectedPhotos.removeAll()
+        delegate?.delectedSelectedCell(hasSelection: false)
     }
     
     func postingNotificationForDeviceOrientations() {
@@ -171,7 +189,7 @@ class PhotosCollectionViewController: UICollectionViewController {
             print("Count = \(sectionInfo.numberOfObjects)")
             return sectionInfo.numberOfObjects
         }
-        return 0
+        return 5
 
     }
 
@@ -184,13 +202,33 @@ class PhotosCollectionViewController: UICollectionViewController {
         return cell
     }
     
+
+    
    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath)
-        if cell?.isSelected == true {
-         cell?.backgroundColor = UIColor.gray
-        } else {
-            cell?.backgroundColor = UIColor.clear
+    
+        delegate?.delectedSelectedCell(hasSelection: true)
+    
+        let selectedPhoto = fetchResultsController.object(at: indexPath)
+    
+        selectedPhotos.append(selectedPhoto)
+    
+        print("selectedCount = \(selectedPhotos.count)")
+
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        
+        if collectionView.indexPathsForSelectedItems?.count == 0 {
+            delegate?.delectedSelectedCell(hasSelection: false)
         }
+        
+         let deselectedPhoto = fetchResultsController.object(at: indexPath)
+        
+        guard let deselectedPhotoIndex = selectedPhotos.index(of: deselectedPhoto) else { return }
+        
+        selectedPhotos.remove(at: deselectedPhotoIndex)
+          print("selectedCount = \(selectedPhotos.count)")
+        
     }
 
     
@@ -200,57 +238,27 @@ extension PhotosCollectionViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         insertedIndexPaths = [IndexPath]()
-        print("insertedIndexPaths = \(insertedIndexPaths)")
         deletedIndexPaths = [IndexPath]()
         updatedIndexPaths = [IndexPath]()
     }
     
-    //    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    //
-    //
-    //        insertedIndexPaths = [IndexPath]()
-    //        deletedIndexPaths = [IndexPath]()
-    //        updatedIndexPaths = [IndexPath]()
-    //    }
+    
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+
+
         
-        collectionView!.performBatchUpdates({() -> Void in
-            print("countIndx = \(self.insertedIndexPaths.count) ")
-            for indexPath in self.insertedIndexPaths {
-                self.collectionView!.insertItems(at: [indexPath])
-            }
-            
-            for indexPath in self.deletedIndexPaths {
-                self.collectionView!.deleteItems(at: [indexPath])
-            }
-            
-            for indexPath in self.updatedIndexPaths {
-                self.collectionView!.reloadItems(at: [indexPath])
-            }
-            
-        }, completion: nil)
-        //        collectionViewer.performBatchUpdates({
-        //
-        //            let _ = self.insertedIndexPaths.map{ self.collectionViewer.insertItems(at: [$0])}
-        //            let _ = self.deletedIndexPaths.map{ self.collectionViewer.insertItems(at: [$0])}
-        //             let _ = self.updatedIndexPaths.map{ self.collectionViewer.insertItems(at: [$0])}
-        //
-        //        }, completion: nil)
+                collectionView!.performBatchUpdates({ () -> Void in
+        
+                    let _ = self.insertedIndexPaths.map{ self.collectionView!.insertItems(at: [$0])}
+                    let _ = self.deletedIndexPaths.map{ self.collectionView!.deleteItems(at: [$0])}
+                     let _ = self.updatedIndexPaths.map{ self.collectionView!.reloadItems(at: [$0])}
+        
+                }, completion: nil)
     }
     
     
-    //    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-    //        let indexSet = IndexSet(integer: sectionIndex)
-    //
-    //        switch type {
-    //        case .insert: collectionViewer.insertSections(indexSet)
-    //        case .delete: collectionViewer.deleteSections(indexSet)
-    //        case .update: fatalError("Not possible")
-    //        default:
-    //            break
-    //        }
-    //    }
+  
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -261,33 +269,35 @@ extension PhotosCollectionViewController: NSFetchedResultsControllerDelegate {
             insertedIndexPaths.append(newIndexPath!)
 //            print("IndexPathnew = \(insertedIndexPaths)")
 //            break
-            
-           //  collectionView?.reloadData()
-//            if (collectionView?.numberOfSections)! > 0 {
 //
-//                if collectionView?.numberOfItems( inSection: newIndexPath!.section ) == 0 {
-////                    self.shouldReloadCollectionView = true
-//                } else {
-//                    blockOperations.append(
-//                        BlockOperation(block: { [weak self] in
-//                            if let this = self {
-//                                DispatchQueue.main.async {
-//                                    this.collectionView!.insertItems(at: [newIndexPath!])
-//                                }
-//                            }
-//                        })
-//                    )
-//                }
-//            }
+       //      collectionView?.reloadData()
+
             
         case .delete:
-            deletedIndexPaths.append(indexPath!)
+            
+//            DispatchQueue.main.async {
+//                if let indexPath = indexPath {
+//
+//                    self.collectionView?.deleteItems(at: [indexPath])
+//
+//                }
+//            }
+           
+            
+           deletedIndexPaths.append(indexPath!)
 //            break
-          //  collectionView?.deleteItems(at: [indexPath!])
+//           
         case .update:
+            
+//            if let indexPath = indexPath {
+//
+//
+//                collectionView?.reloadItems(at: [indexPath])
+//
+//            }
             updatedIndexPaths.append(indexPath!)
 //            break
-            //collectionView?.reloadItems(at: [indexPath!])
+           
             
         case .move:
             print("Move an item. We don't expect to see this in this app.")
@@ -335,6 +345,11 @@ extension PhotosCollectionViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension PhotosCollectionViewController: NewCollectionDelegate {
+    func deleteSelectedCell() {
+        print("deleteSelectedCellDelegateWorks")
+        deleteOnlySelectedCell()
+    }
+    
     func clearForNewCollection() {
         print("delegateWorks")
         callNewCollectionAction()

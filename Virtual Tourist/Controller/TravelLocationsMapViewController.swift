@@ -28,7 +28,7 @@ class TravelLocationsMapViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        EditButton.title = "Edit"
         sharedFunc.dataController = dataController
         sharedFunc.callingInitialMapState(mapView: mapView)
         sharedFunc.fetchRequest(selfClass: self, mapView: mapView)
@@ -51,6 +51,7 @@ class TravelLocationsMapViewController: UIViewController {
         isEdititng = !isEdititng
         var tempY:CGFloat = 0.0
         if isEdititng{
+            EditButton.title = "Done"
             tempY = self.mapView.bounds.origin.y
             UIView.animate(withDuration: 0.2) {
                 self.mapView.bounds.origin.y = self.EditView.frame.height
@@ -58,6 +59,7 @@ class TravelLocationsMapViewController: UIViewController {
             }
             
         } else {
+            EditButton.title = "Edit"
             UIView.animate(withDuration: 0.2) {
                 self.mapView.bounds.origin.y = tempY
                 self.longPressGestures.isEnabled = true
@@ -149,21 +151,25 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        let backItem = UIBarButtonItem()
+        backItem.title = "OK"
+        navigationItem.backBarButtonItem = backItem
+        
         if let dict = sender as? JSON {
         print("dict = \(dict)")
-        if segue.identifier == "showVC" {
-            let vc = segue.destination as! PhotoAlbumViewController
-            vc.lat = dict["lat"] as? Double
-            vc.long = dict["long"] as? Double
-            vc.zlat = dict["zLat"] as? Double
-            vc.zlong = dict["zLong"] as? Double
-              if let pin = sharedFunc.loadPin(latitude: dict["lat"] as! Double, longitude: dict["long"] as! Double) {
-                vc.pin = pin
-                //vc.dataController = dataController
+            if segue.identifier == "showVC" {
+                let vc = segue.destination as! PhotoAlbumViewController
+                vc.lat = dict["lat"] as? Double
+                vc.long = dict["long"] as? Double
+                vc.zlat = dict["zLat"] as? Double
+                vc.zlong = dict["zLong"] as? Double
+                if let pin = sharedFunc.loadPin(latitude: dict["lat"] as! Double, longitude: dict["long"] as! Double) {
+                    vc.pin = pin
+                    //vc.dataController = dataController
+                }
+                
+                
             }
-            
-            
-        }
         } else {print("Failed Casting")}
     }
     

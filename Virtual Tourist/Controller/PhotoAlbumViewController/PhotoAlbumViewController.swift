@@ -12,6 +12,7 @@ import MapKit
 
 protocol NewCollectionDelegate: class {
     func clearForNewCollection()
+    func deleteSelectedCell()
 }
 
 class PhotoAlbumViewController: UIViewController {
@@ -19,9 +20,8 @@ class PhotoAlbumViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     
+    @IBOutlet weak var newCollectionButton: UIButton!
     
-//    @IBOutlet weak var collectionViewer: UICollectionView!
-//    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
     var lat: Double?
     var long: Double?
@@ -30,43 +30,34 @@ class PhotoAlbumViewController: UIViewController {
     
     var dataController: DataController = CommonFunc.shared.dataController
     let sharedFunc = CommonFunc.shared
-    var pin:Pins!
+    var pin:Pins?
     weak var delegate: NewCollectionDelegate?
     
-    
-//    var fetchResultsController: NSFetchedResultsController<Photo>!
-//
-//    var selectedIndexes = [IndexPath]()
-//    var insertedIndexPaths: [IndexPath]!
-//    var deletedIndexPaths: [IndexPath]!
-//    var updatedIndexPaths: [IndexPath]!
-//
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-     //   updateFlowLayout(view.frame.size)
-       
-//        CommonFunc.shared.setMapLocation(mapView: mapView, latitude: lat ?? 0.0, longitude: long ?? 0.0, zLatitude: zlat ?? 0.0, zLongitude: zlong ?? 0)
-//        if let photos = pin.photos, photos.count == 0 {
-//            callingAPI(pin: pin)
-//        }
-//        mapView.delegate = self
+ 
+        
         mapView.isZoomEnabled = false
         mapView.isScrollEnabled = false
-        showOnTheMap(pin)
+        
+        if let pin = pin {
+            showOnTheMap(pin)
+        } else {print(" Pin not found 😩");return}
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-      //  setupFetchResultsControllerMethod()
-      //   setupFetchedResultControllerWith(pin)
+    
     }
     
     
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-      //  fetchResultsController = nil
+      
     }
     
     private func showOnTheMap(_ pin: Pins) {
@@ -74,34 +65,53 @@ class PhotoAlbumViewController: UIViewController {
         let lat = pin.latitude
         let lon = pin.longitude
         let locCoord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        let zoomSpan:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0.402766391761954, longitudeDelta: 0.119873426121444)
+        
+        let region:MKCoordinateRegion = MKCoordinateRegionMake(locCoord, zoomSpan)
         
         let annotation = MKPointAnnotation()
         annotation.coordinate = locCoord
         
         mapView.removeAnnotations(mapView.annotations)
         mapView.addAnnotation(annotation)
-        mapView.setCenter(locCoord, animated: true)
+       // mapView.setCenter(locCoord, animated: true)
+   
+        mapView.setRegion(region, animated: false)
     }
     
+    var hasSelectedCell = false
+    func changeButtonName(hasSelection: Bool) {
+        
+        if hasSelection {
+            self.hasSelectedCell = hasSelection
+            self.newCollectionButton.setTitle("Remove Selected Pictures", for: .normal)
+        } else {
+            self.hasSelectedCell = hasSelection
+            self.newCollectionButton.setTitle("New Collection", for: .normal)
+        }
+        
+    }
 
     
     @IBAction func newCollection(_ sender: Any) {
         print("callingDelegate")
-        delegate?.clearForNewCollection()
-//        let _ = fetchResultsController.fetchedObjects!.map{ sharedFunc.dataController.viewContext.delete($0)}
-//        sharedFunc.saved()
-//        callingAPI(pin: pin)
-//
+        if hasSelectedCell {
+            delegate?.deleteSelectedCell()
+        } else {
+            delegate?.clearForNewCollection()
+        }
+        
+       
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("Segued")
-        if segue.identifier == "segue1" {
+       
+ 
             let vc = segue.destination as! PhotosCollectionViewController
-            vc.dataController = dataController
-            vc.pin = pin
-            vc.photoAlbum = self
-        }
+                vc.pin = pin
+                vc.photoAlbum = self
+                vc.delegate = self
+        
     }
     
 
@@ -127,5 +137,15 @@ func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnota
     
     return pinView
    }
+}
+
+extension PhotoAlbumViewController: SelectionCollectionDelegate {
+    
+    func delectedSelectedCell(hasSelection: Bool) {
+        print("Has Selection = \(hasSelection)")
+        changeButtonName(hasSelection: hasSelection)
+    }
+    
+    
 }
 
