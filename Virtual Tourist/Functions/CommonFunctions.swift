@@ -82,7 +82,7 @@ class CommonFunc: NSObject {
             pinAnnotation = MKPointAnnotation()
             pinAnnotation!.coordinate = locCoord
             
-            print("\(#function) Coordinate: \(locCoord.latitude),\(locCoord.longitude)")
+           
             
             mapView.addAnnotation(pinAnnotation!)
             
@@ -101,12 +101,12 @@ class CommonFunc: NSObject {
     }
     
     func loadPin(latitude: Double, longitude: Double) -> Pins? {
-        print("lat = \(latitude), long = \(longitude)")
+        
         var pin: Pins?
         
         let fetchRequest: NSFetchRequest<Pins> = Pins.fetchRequest()
         let predicate = NSPredicate(format: "latitude == %lf AND longitude == %lf", latitude, longitude)
-        print("predicate = \(predicate)")
+        
         fetchRequest.predicate = predicate
         
         do {
@@ -127,7 +127,7 @@ class CommonFunc: NSObject {
         if dataController.viewContext.hasChanges {
             do{
                 try dataController.viewContext.save()
-                // pins.insert(pin, at: 0)
+                
                 print("Saved Pin😛")
             }catch let error{
                 print(" Error😩 = \(error.localizedDescription)")

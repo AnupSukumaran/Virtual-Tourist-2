@@ -118,7 +118,7 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        print("selecting")
+        
         guard let annotation = view.annotation else {return}
         let zoom = mapView.region.span
        

@@ -129,14 +129,14 @@ class APIService: NSObject {
                                 Constants.keys.NoJSONCallback: Constants.values.DisableJSONCallback,
                                 Constants.keys.Page: randomPage,
                                 Constants.keys.Per_page: Constants.values.perPage] as [String : AnyObject]
-        print("Random= \(randomPage)")
+        
         let request = URLRequest(url: flickrURLFromParameters(methodParameters))
         
         let _ = getMethod(request: request) { (response) in
             switch response {
             case .Success(let data):
                 guard let jsonData = data as? JSON else {return}
-                print("JsonDatra = \(jsonData)")
+                
                 let galleryData = ModelClassResponse(json: jsonData)
                 
                 DispatchQueue.main.async {
