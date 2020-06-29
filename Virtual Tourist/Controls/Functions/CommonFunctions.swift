@@ -33,7 +33,7 @@ class CommonFunc: NSObject {
         
         let zoomSpan:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: zLatitude, longitudeDelta: zLongitude)
         let location:CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude, longitude)
-        let region:MKCoordinateRegion = MKCoordinateRegionMake(location, zoomSpan)
+        let region:MKCoordinateRegion = MKCoordinateRegion.init(center: location, span: zoomSpan)
         mapView.setRegion(region, animated: false)
         
     }

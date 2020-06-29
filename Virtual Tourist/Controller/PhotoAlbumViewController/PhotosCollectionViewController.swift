@@ -21,7 +21,7 @@ class PhotosCollectionViewController: UICollectionViewController {
     
     
     weak var delegate: SelectionCollectionDelegate?
-    var dataController: DataController = CommonFunc.shared.dataController
+    var dataController: DataController!// = CommonFunc.shared.dataController
     let sharedFunc = CommonFunc.shared
     var pin:Pins!
     var fetchResultsController: NSFetchedResultsController<Photo>!
@@ -159,7 +159,7 @@ class PhotosCollectionViewController: UICollectionViewController {
     }
     
     func postingNotificationForDeviceOrientations() {
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     deinit {
@@ -224,7 +224,7 @@ class PhotosCollectionViewController: UICollectionViewController {
         
          let deselectedPhoto = fetchResultsController.object(at: indexPath)
         
-        guard let deselectedPhotoIndex = selectedPhotos.index(of: deselectedPhoto) else { return }
+        guard let deselectedPhotoIndex = selectedPhotos.firstIndex(of: deselectedPhoto) else { return }
         
         selectedPhotos.remove(at: deselectedPhotoIndex)
           print("selectedCount = \(selectedPhotos.count)")
@@ -242,24 +242,15 @@ extension PhotosCollectionViewController: NSFetchedResultsControllerDelegate {
         updatedIndexPaths = [IndexPath]()
     }
     
-    
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        collectionView!.performBatchUpdates({ () -> Void in
 
+            let _ = self.insertedIndexPaths.map{ self.collectionView!.insertItems(at: [$0])}
+            let _ = self.deletedIndexPaths.map{ self.collectionView!.deleteItems(at: [$0])}
+            let _ = self.updatedIndexPaths.map{ self.collectionView!.reloadItems(at: [$0])}
 
-        
-                collectionView!.performBatchUpdates({ () -> Void in
-        
-                    let _ = self.insertedIndexPaths.map{ self.collectionView!.insertItems(at: [$0])}
-                    let _ = self.deletedIndexPaths.map{ self.collectionView!.deleteItems(at: [$0])}
-                     let _ = self.updatedIndexPaths.map{ self.collectionView!.reloadItems(at: [$0])}
-        
-                }, completion: nil)
+        }, completion: nil)
     }
-    
-    
-  
-    
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         
@@ -267,53 +258,20 @@ extension PhotosCollectionViewController: NSFetchedResultsControllerDelegate {
         case .insert:
             print("didChangenewIndexPath = \(String(describing: newIndexPath))")
             insertedIndexPaths.append(newIndexPath!)
-//            print("IndexPathnew = \(insertedIndexPaths)")
-//            break
-//
-       //      collectionView?.reloadData()
 
-            
         case .delete:
-            
-//            DispatchQueue.main.async {
-//                if let indexPath = indexPath {
-//
-//                    self.collectionView?.deleteItems(at: [indexPath])
-//
-//                }
-//            }
-           
-            
+
            deletedIndexPaths.append(indexPath!)
-//            break
-//           
-        case .update:
-            
-//            if let indexPath = indexPath {
-//
-//
-//                collectionView?.reloadItems(at: [indexPath])
-//
-//            }
-            updatedIndexPaths.append(indexPath!)
-//            break
            
-            
+        case .update:
+            updatedIndexPaths.append(indexPath!)
+    
         case .move:
             print("Move an item. We don't expect to see this in this app.")
             break
+        @unknown default:
+            fatalError("fatalError")
         }
-        //        switch type {
-        //        case .insert:
-        //            collectionViewer.insertItems(at: [indexPath!])
-        //        case .delete:
-        //            collectionViewer.deleteItems(at: [indexPath!])
-        //        case .update:
-        //            collectionViewer.reloadItems(at: [indexPath!])
-        //        case .move:
-        //          //  collectionViewer.moveRow(at: indexPath!, to: newIndexPath!)
-        //            collectionViewer.moveItem(at: indexPath!, to: newIndexPath!)
-        //        }
         
     }
     

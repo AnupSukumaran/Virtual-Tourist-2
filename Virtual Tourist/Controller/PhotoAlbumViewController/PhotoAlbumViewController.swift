@@ -22,13 +22,14 @@ class PhotoAlbumViewController: UIViewController {
     
     @IBOutlet weak var newCollectionButton: UIButton!
     
+    var locModel: LocModel?
     
-    var lat: Double?
-    var long: Double?
-    var zlat: Double?
-    var zlong: Double?
+//    var lat: Double?
+//    var long: Double?
+//    var zlat: Double?
+//    var zlong: Double?
     
-    var dataController: DataController = CommonFunc.shared.dataController
+    var dataController: DataController!// = CommonFunc.shared.dataController
     let sharedFunc = CommonFunc.shared
     var pin:Pins?
     weak var delegate: NewCollectionDelegate?
@@ -67,7 +68,7 @@ class PhotoAlbumViewController: UIViewController {
         let locCoord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
         let zoomSpan:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0.402766391761954, longitudeDelta: 0.119873426121444)
         
-        let region:MKCoordinateRegion = MKCoordinateRegionMake(locCoord, zoomSpan)
+        let region:MKCoordinateRegion = MKCoordinateRegion.init(center: locCoord, span: zoomSpan)
         
         let annotation = MKPointAnnotation()
         annotation.coordinate = locCoord
@@ -108,6 +109,7 @@ class PhotoAlbumViewController: UIViewController {
        
  
             let vc = segue.destination as! PhotosCollectionViewController
+                vc.dataController = dataController
                 vc.pin = pin
                 vc.photoAlbum = self
                 vc.delegate = self
