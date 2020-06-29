@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SASLogger",
+        "repositoryURL": "https://github.com/AnupSukumaran/SASLogger.git",
+        "state": {
+          "branch": null,
+          "revision": "fe9bcfc41b891e90aabf186906e01b977bed1bba",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
