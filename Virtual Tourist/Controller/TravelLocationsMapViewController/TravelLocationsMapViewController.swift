@@ -18,14 +18,14 @@ class TravelLocationsMapViewController: UIViewController {
     @IBOutlet var longPressGestures: UILongPressGestureRecognizer!
   
     var viewModel: TravelLocationsMapViewModel!
-    var dataController: DataController!
+   // var dataController: DataController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         EditButton.title = "Edit"
-        viewModel = TravelLocationsMapViewModel(dataController: dataController, mapView: mapView)
-        viewModel.callingInitialMapState()
-        viewModel.fetchRequest()
+       // viewModel = TravelLocationsMapViewModel(dataController: dataController)
+        viewModel.callingInitialMapState(mapView: mapView)
+        viewModel.fetchRequest(mapView: mapView)
 
     }
     
@@ -46,7 +46,7 @@ class TravelLocationsMapViewController: UIViewController {
     }
 
     @IBAction func AddPinsAction(_ sender: UILongPressGestureRecognizer) {
-        viewModel.callingPinToDrop(sender)
+        viewModel.callingPinToDrop(sender, mapView: mapView)
     }
         
     @IBAction func EditingAction(_ sender: UIBarButtonItem) {

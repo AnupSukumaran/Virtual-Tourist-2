@@ -22,8 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let nav = window?.rootViewController as! UINavigationController
         let travelLocationsMapViewController = nav.topViewController as! TravelLocationsMapViewController
-//        travelLocationsMapViewController.viewModel = TravelLocationsMapViewModel(dataController: dataController, mapView: travelLocationsMapViewController.mapView)
-        travelLocationsMapViewController.dataController = dataController
+        travelLocationsMapViewController.viewModel = TravelLocationsMapViewModel(dataController: dataController)
+        //travelLocationsMapViewController.viewModel.dataController = dataController
         
         return true
     }

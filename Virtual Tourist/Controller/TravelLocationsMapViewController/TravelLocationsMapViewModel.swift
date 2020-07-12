@@ -13,7 +13,7 @@ import CoreData
 class TravelLocationsMapViewModel: NSObject {
     
     var dataController: DataController!
-    var mapView: MKMapView!
+   // var mapView: MKMapView!
     var pins: [Pins] = []
     var pinAnnotations = [MKPointAnnotation]()
     var pinAnnotation: MKPointAnnotation? = nil
@@ -21,21 +21,21 @@ class TravelLocationsMapViewModel: NSObject {
     
     override init() {}
     
-    init(dataController: DataController, mapView: MKMapView) {
+    init(dataController: DataController) {
         self.dataController = dataController
-        self.mapView = mapView
+        //self.mapView = mapView
     }
     
-    func callingInitialMapState() {
+    func callingInitialMapState(mapView: MKMapView) {
         if let lat = UserDefaults.standard.value(forKey: Constants.lat) as? Double , let long = UserDefaults.standard.value(forKey: Constants.long) as? Double, let zlat = UserDefaults.standard.value(forKey: Constants.zlat) as? Double, let zLong = UserDefaults.standard.value(forKey: Constants.zLong) as? Double  {
             
-            setMapLocation(latitude: lat, longitude: long, zLatitude: zlat, zLongitude: zLong)
+            setMapLocation(latitude: lat, longitude: long, zLatitude: zlat, zLongitude: zLong, mapView: mapView)
         } else {
             print("Failed")
         }
     }
     
-    func setMapLocation( latitude: CLLocationDegrees, longitude: CLLocationDegrees, zLatitude: CLLocationDegrees, zLongitude: CLLocationDegrees){
+    func setMapLocation( latitude: CLLocationDegrees, longitude: CLLocationDegrees, zLatitude: CLLocationDegrees, zLongitude: CLLocationDegrees, mapView: MKMapView){
         
         let zoomSpan:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: zLatitude, longitudeDelta: zLongitude)
         let location:CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude, longitude)
@@ -44,7 +44,7 @@ class TravelLocationsMapViewModel: NSObject {
         
     }
     
-    func fetchRequest() {
+    func fetchRequest(mapView: MKMapView) {
        // let vc = selfClass as! TravelLocationsMapViewController
         
         let fetchRequest: NSFetchRequest<Pins> = Pins.fetchRequest()
@@ -76,7 +76,7 @@ class TravelLocationsMapViewModel: NSObject {
         
     }
     
-    func callingPinToDrop(_ sender: UILongPressGestureRecognizer) {
+    func callingPinToDrop(_ sender: UILongPressGestureRecognizer, mapView: MKMapView) {
         
         let location = sender.location(in: mapView)
         let locCoord = mapView.convert(location, toCoordinateFrom: mapView)
@@ -183,7 +183,7 @@ class TravelLocationsMapViewModel: NSObject {
         return pinView
     }
     
-    func getAnnotaionsOrLocModel(view: MKAnnotationView) -> (annotation: MKAnnotation, locModel: LocModel)? {
+    func getAnnotaionsOrLocModel(view: MKAnnotationView, mapView: MKMapView) -> (annotation: MKAnnotation, locModel: LocModel)? {
         guard let annotation = view.annotation else {return nil}
          let zoom = mapView.region.span
         

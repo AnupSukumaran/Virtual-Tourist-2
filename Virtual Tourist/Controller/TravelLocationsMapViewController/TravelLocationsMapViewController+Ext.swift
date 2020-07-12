@@ -33,7 +33,7 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
-        guard let values = viewModel.getAnnotaionsOrLocModel(view: view) else {return}
+        guard let values = viewModel.getAnnotaionsOrLocModel(view: view, mapView: mapView) else {return}
         let annotation = values.annotation
         let locModel = values.locModel
 
