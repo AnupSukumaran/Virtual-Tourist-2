@@ -98,26 +98,28 @@ class TravelLocationsMapViewModel: NSObject {
             pin.latitude = locCoord.latitude
             pin.longitude = locCoord.longitude
             
-            saved()
+            dataController.saved()
+            
+           // saved()
             
             
         }
     }
     
-    func saved() {
-        if dataController.viewContext.hasChanges {
-            do{
-                try dataController.viewContext.save()
-                
-                print("Saved Pin😛")
-            }catch let error{
-                print(" Error😩 = \(error.localizedDescription)")
-            }
-        } else {
-            print("No Changes in nsmanagedobjectcontext")
-        }
-        
-    }
+//    func saved() {
+//        if dataController.viewContext.hasChanges {
+//            do{
+//                try dataController.viewContext.save()
+//
+//                print("Saved Pin😛")
+//            }catch let error{
+//                print(" Error😩 = \(error.localizedDescription)")
+//            }
+//        } else {
+//            print("No Changes in nsmanagedobjectcontext")
+//        }
+//
+//    }
     
     func EditingAction(comp: (Bool) -> ()) {
         isEdititng = !isEdititng
@@ -204,9 +206,10 @@ class TravelLocationsMapViewModel: NSObject {
         mv.removeAnnotation(annotation)
 
          if let pin = loadPin(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude) {
-        
-             dataController.viewContext.delete(pin)
-             saved()
+            dataController.deleted(pin)
+             //dataController.viewContext.delete(pin)
+             dataController.saved()
+             //saved()
 
          } else {
              print("Not returning pins")

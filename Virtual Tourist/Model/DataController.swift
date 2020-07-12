@@ -42,4 +42,23 @@ class DataController {
         }
     }
     
+    func saved() {
+        if viewContext.hasChanges {
+            do{
+                try viewContext.save()
+                
+                print("Saved Pin😛")
+            }catch let error{
+                print(" Error😩 = \(error.localizedDescription)")
+            }
+        } else {
+            print("No Changes in nsmanagedobjectcontext")
+        }
+        
+    }
+    
+    func deleted(_ data: NSManagedObject) {
+        viewContext.delete(data)
+    }
+    
 }

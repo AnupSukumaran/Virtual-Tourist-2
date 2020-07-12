@@ -18,12 +18,10 @@ class TravelLocationsMapViewController: UIViewController {
     @IBOutlet var longPressGestures: UILongPressGestureRecognizer!
   
     var viewModel: TravelLocationsMapViewModel!
-   // var dataController: DataController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         EditButton.title = "Edit"
-       // viewModel = TravelLocationsMapViewModel(dataController: dataController)
         viewModel.callingInitialMapState(mapView: mapView)
         viewModel.fetchRequest(mapView: mapView)
 
