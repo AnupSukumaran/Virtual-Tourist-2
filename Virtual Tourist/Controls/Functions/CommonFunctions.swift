@@ -72,71 +72,71 @@ class CommonFunc: NSObject {
     
    
     
-    func callingPinToDrop(_ sender: UILongPressGestureRecognizer, mapView: MKMapView) {
-        
-        let location = sender.location(in: mapView)
-        let locCoord = mapView.convert(location, toCoordinateFrom: mapView)
-        
-        if sender.state == .began {
-            
-            pinAnnotation = MKPointAnnotation()
-            pinAnnotation!.coordinate = locCoord
-            
-           
-            
-            mapView.addAnnotation(pinAnnotation!)
-            
-        } else if sender.state == .changed {
-            pinAnnotation!.coordinate = locCoord
-        } else if sender.state == .ended {
-            
-            let pin = Pins(context: dataController.viewContext)
-            pin.latitude = locCoord.latitude
-            pin.longitude = locCoord.longitude
-            
-            saved()
-            
-            
-        }
-    }
+//    func callingPinToDrop(_ sender: UILongPressGestureRecognizer, mapView: MKMapView) {
+//
+//        let location = sender.location(in: mapView)
+//        let locCoord = mapView.convert(location, toCoordinateFrom: mapView)
+//
+//        if sender.state == .began {
+//
+//            pinAnnotation = MKPointAnnotation()
+//            pinAnnotation!.coordinate = locCoord
+//
+//
+//
+//            mapView.addAnnotation(pinAnnotation!)
+//
+//        } else if sender.state == .changed {
+//            pinAnnotation!.coordinate = locCoord
+//        } else if sender.state == .ended {
+//
+//            let pin = Pins(context: dataController.viewContext)
+//            pin.latitude = locCoord.latitude
+//            pin.longitude = locCoord.longitude
+//
+//            saved()
+//
+//
+//        }
+//    }
     
-    func loadPin(latitude: Double, longitude: Double) -> Pins? {
-        
-        var pin: Pins?
-        
-        let fetchRequest: NSFetchRequest<Pins> = Pins.fetchRequest()
-        let predicate = NSPredicate(format: "latitude == %lf AND longitude == %lf", latitude, longitude)
-        
-        fetchRequest.predicate = predicate
-        
-        do {
-            let results = try dataController.viewContext.fetch(fetchRequest)
-            
-            pin = results.first
-            
-            return pin
-        } catch let error {
-            print("Error = \(error.localizedDescription)")
-            return nil
-        }
-        
-        
-    }
+//    func loadPin(latitude: Double, longitude: Double) -> Pins? {
+//
+//        var pin: Pins?
+//
+//        let fetchRequest: NSFetchRequest<Pins> = Pins.fetchRequest()
+//        let predicate = NSPredicate(format: "latitude == %lf AND longitude == %lf", latitude, longitude)
+//
+//        fetchRequest.predicate = predicate
+//
+//        do {
+//            let results = try dataController.viewContext.fetch(fetchRequest)
+//
+//            pin = results.first
+//
+//            return pin
+//        } catch let error {
+//            print("Error = \(error.localizedDescription)")
+//            return nil
+//        }
+//
+//
+//    }
     
-    func saved() {
-        if dataController.viewContext.hasChanges {
-            do{
-                try dataController.viewContext.save()
-                
-                print("Saved Pin😛")
-            }catch let error{
-                print(" Error😩 = \(error.localizedDescription)")
-            }
-        } else {
-            print("No Changes in nsmanagedobjectcontext")
-        }
-        
-    }
+//    func saved() {
+//        if dataController.viewContext.hasChanges {
+//            do{
+//                try dataController.viewContext.save()
+//                
+//                print("Saved Pin😛")
+//            }catch let error{
+//                print(" Error😩 = \(error.localizedDescription)")
+//            }
+//        } else {
+//            print("No Changes in nsmanagedobjectcontext")
+//        }
+//        
+//    }
     
 }
 

@@ -22,19 +22,26 @@ class PhotoAlbumViewController: UIViewController {
     
     @IBOutlet weak var newCollectionButton: UIButton!
     
-    var locModel: LocModel?
+    
+    var viewModel: PhotoAlbumViewModel! {
+        didSet {
+            photoAlbumViewModelComps()
+        }
+    }
+    
+ //   var locModel: LocModel?
     
 //    var lat: Double?
 //    var long: Double?
 //    var zlat: Double?
 //    var zlong: Double?
     
-    var dataController: DataController!// = CommonFunc.shared.dataController
-    let sharedFunc = CommonFunc.shared
-    var pin:Pins?
-    weak var delegate: NewCollectionDelegate?
+   // var dataController: DataController!// = CommonFunc.shared.dataController
+    //let sharedFunc = CommonFunc.shared
+  //  var pin:Pins?
+   // weak var delegate: NewCollectionDelegate?
     
-
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,10 +49,15 @@ class PhotoAlbumViewController: UIViewController {
         
         mapView.isZoomEnabled = false
         mapView.isScrollEnabled = false
+        mapView.delegate = viewModel
+
+        if let pins = viewModel.pin {
+            viewModel.showOnTheMap(pins, mapView: mapView)
+        }
         
-        if let pin = pin {
-            showOnTheMap(pin)
-        } else {print(" Pin not found 😩");return}
+//        if let pin = pin {
+//            viewModel.showOnTheMap(pin, mapView: mapView)
+//        } else {print(" Pin not found 😩");return}
         
     }
     
@@ -61,24 +73,21 @@ class PhotoAlbumViewController: UIViewController {
       
     }
     
-    private func showOnTheMap(_ pin: Pins) {
+    func photoAlbumViewModelComps() {
         
-        let lat = pin.latitude
-        let lon = pin.longitude
-        let locCoord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-        let zoomSpan:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0.402766391761954, longitudeDelta: 0.119873426121444)
-        
-        let region:MKCoordinateRegion = MKCoordinateRegion.init(center: locCoord, span: zoomSpan)
-        
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = locCoord
-        
-        mapView.removeAnnotations(mapView.annotations)
-        mapView.addAnnotation(annotation)
-       // mapView.setCenter(locCoord, animated: true)
-   
-        mapView.setRegion(region, animated: false)
+        viewModel.changeButtonNameComp = { [weak self] (hasSelected) in
+            guard let vc = self else {return}
+            if hasSelected {
+              vc.viewModel.hasSelectedCell = hasSelected
+              vc.newCollectionButton.setTitle("Remove Selected Pictures", for: .normal)
+            } else {
+              vc.viewModel.hasSelectedCell = hasSelected
+              vc.newCollectionButton.setTitle("New Collection", for: .normal)
+            }
+           
+        }
     }
+    
     
     var hasSelectedCell = false
     func changeButtonName(hasSelection: Bool) {
@@ -96,10 +105,14 @@ class PhotoAlbumViewController: UIViewController {
     
     @IBAction func newCollection(_ sender: Any) {
         print("callingDelegate")
+        
         if hasSelectedCell {
-            delegate?.deleteSelectedCell()
+            
+            viewModel.delegate?.deleteSelectedCell()
+           // delegate?.deleteSelectedCell()
         } else {
-            delegate?.clearForNewCollection()
+            viewModel.delegate?.clearForNewCollection()
+            //delegate?.clearForNewCollection()
         }
         
        
@@ -108,46 +121,49 @@ class PhotoAlbumViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        
  
-            let vc = segue.destination as! PhotosCollectionViewController
-                vc.dataController = dataController
-                vc.pin = pin
-                vc.photoAlbum = self
-                vc.delegate = self
+        let vc = segue.destination as! PhotosCollectionViewController
+        vc.viewModel = PhotosCollectionViewModel(dataController: viewModel.dataController, pin:viewModel.pin)
+//                vc.dataController = dataController
+//                vc.pin = pin
+        vc.viewModel.delegate = viewModel
+        //viewModel.delegate = vc.viewModel
+//                vc.photoAlbum = self
+//                vc.delegate = self
         
     }
     
 
 }
 
-extension PhotoAlbumViewController: MKMapViewDelegate {
-    
-    
-func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-    
-    let reuseId = "pin"
-    
-    var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-    
-    if pinView == nil {
-        pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-        pinView!.canShowCallout = false
-        pinView!.pinTintColor = .red
-        pinView!.animatesDrop = true
-    } else {
-        pinView!.annotation = annotation
-    }
-    
-    return pinView
-   }
-}
-
-extension PhotoAlbumViewController: SelectionCollectionDelegate {
-    
-    func delectedSelectedCell(hasSelection: Bool) {
-        print("Has Selection = \(hasSelection)")
-        changeButtonName(hasSelection: hasSelection)
-    }
-    
-    
-}
+//extension PhotoAlbumViewController: MKMapViewDelegate {
+//
+//
+//func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+//
+//    let reuseId = "pin"
+//
+//    var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+//
+//    if pinView == nil {
+//        pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+//        pinView!.canShowCallout = false
+//        pinView!.pinTintColor = .red
+//        pinView!.animatesDrop = true
+//    } else {
+//        pinView!.annotation = annotation
+//    }
+//
+//    return pinView
+//   }
+//}
+//
+//extension PhotoAlbumViewController: SelectionCollectionDelegate {
+//
+//    func delectedSelectedCell(hasSelection: Bool) {
+//        print("Has Selection = \(hasSelection)")
+//        changeButtonName(hasSelection: hasSelection)
+//    }
+//
+//
+//}
 

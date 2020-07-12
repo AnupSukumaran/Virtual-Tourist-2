@@ -26,7 +26,7 @@ class PhotoViewerCollectionViewCell: UICollectionViewCell {
     }
     
     
-    func coreConfig(photo: Photo, pin: Pins) {
+    func coreConfig(photo: Photo, pin: Pins, dataController: DataController) {
         self.activityIndicator.startAnimating()
         self.ImageViewer.image = UIImage(named: "Image")
         if let imaged = photo.image {
@@ -35,7 +35,7 @@ class PhotoViewerCollectionViewCell: UICollectionViewCell {
             self.ImageViewer.image = UIImage(data: imaged)
         } else {
             print("NoCore")
-            let backgroundContext: NSManagedObjectContext! = CommonFunc.shared.dataController.backgroundContext
+            let backgroundContext: NSManagedObjectContext! =  dataController.backgroundContext //CommonFunc.shared.dataController.backgroundContext
             if let imageURL = photo.imageUrl {
                 guard let url = URL(string: imageURL) else {return}
                 

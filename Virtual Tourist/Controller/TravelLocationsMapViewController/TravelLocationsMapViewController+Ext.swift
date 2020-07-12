@@ -56,13 +56,20 @@ extension TravelLocationsMapViewController: MKMapViewDelegate {
         
         if let dict = sender as? LocModel {
         print("dict = \(dict)")
+            
             if segue.identifier == "showVC" {
                 let vc = segue.destination as! PhotoAlbumViewController
-                vc.locModel = dict
-                vc.dataController = viewModel.dataController
-                if let pin = viewModel.loadPin(latitude: dict.lat , longitude: dict.lon ) {
-                    vc.pin = pin
-                }
+              //  vc.locModel = dict
+                
+//                let ss = viewModel.loadPin(latitude: dict.lat , longitude: dict.lon )
+//                let ssss = ss?.latitude
+                
+                vc.viewModel = PhotoAlbumViewModel(dataController: viewModel.dataController, pins: viewModel.loadPin(latitude: dict.lat , longitude: dict.lon ))
+                
+              //  vc.dataController = viewModel.dataController
+//                if let pin = viewModel.loadPin(latitude: dict.lat , longitude: dict.lon ) {
+//                    vc.pin = pin
+//                }
             }
         } else {print("Failed Casting")}
 
