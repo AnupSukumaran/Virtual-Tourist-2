@@ -98,6 +98,7 @@ class PhotosCollectionViewModel: NSObject {
     
     func deleteOnlySelectedCell() {
         print("deleteSelctedCells")
+        
         for items in selectedPhotos {
             dataController.deleted(items)
             //dataController.viewContext.delete(items)
@@ -105,6 +106,7 @@ class PhotosCollectionViewModel: NSObject {
             //sharedFunc.saved()
         }
         selectedPhotos.removeAll()
+        
         delegate?.delectedSelectedCell(hasSelection: false)
     }
     

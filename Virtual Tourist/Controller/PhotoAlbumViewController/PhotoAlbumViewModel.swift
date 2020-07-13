@@ -47,8 +47,8 @@ class PhotoAlbumViewModel: NSObject {
     
     
     func changeButtonName(hasSelection: Bool) {
-        
-       changeButtonNameComp?(self.hasSelectedCell)
+        hasSelectedCell = hasSelection
+       changeButtonNameComp?(hasSelection)
         
       
        

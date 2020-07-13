@@ -89,14 +89,14 @@ class PhotoAlbumViewController: UIViewController {
     }
     
     
-    var hasSelectedCell = false
+   
     func changeButtonName(hasSelection: Bool) {
         
         if hasSelection {
-            self.hasSelectedCell = hasSelection
+            
             self.newCollectionButton.setTitle("Remove Selected Pictures", for: .normal)
         } else {
-            self.hasSelectedCell = hasSelection
+            
             self.newCollectionButton.setTitle("New Collection", for: .normal)
         }
         
@@ -106,11 +106,12 @@ class PhotoAlbumViewController: UIViewController {
     @IBAction func newCollection(_ sender: Any) {
         print("callingDelegate")
         
-        if hasSelectedCell {
+        if viewModel.hasSelectedCell {
             
             viewModel.delegate?.deleteSelectedCell()
            // delegate?.deleteSelectedCell()
         } else {
+            
             viewModel.delegate?.clearForNewCollection()
             //delegate?.clearForNewCollection()
         }
@@ -125,6 +126,7 @@ class PhotoAlbumViewController: UIViewController {
         vc.viewModel = PhotosCollectionViewModel(dataController: viewModel.dataController, pin:viewModel.pin)
 //                vc.dataController = dataController
 //                vc.pin = pin
+        viewModel.delegate = vc.viewModel
         vc.viewModel.delegate = viewModel
         //viewModel.delegate = vc.viewModel
 //                vc.photoAlbum = self

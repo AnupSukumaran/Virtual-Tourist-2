@@ -21,7 +21,7 @@ class PhotosCollectionViewController: UICollectionViewController {
     
     var viewModel: PhotosCollectionViewModel! {
         didSet {
-            //viewModelCompBlksSetter()
+            viewModelCompBlksSetter()
         }
     }
     

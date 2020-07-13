@@ -27,7 +27,11 @@ class TravelLocationsMapViewModel: NSObject {
     }
     
     func callingInitialMapState(mapView: MKMapView) {
-        if let lat = UserDefaults.standard.value(forKey: Constants.lat) as? Double , let long = UserDefaults.standard.value(forKey: Constants.long) as? Double, let zlat = UserDefaults.standard.value(forKey: Constants.zlat) as? Double, let zLong = UserDefaults.standard.value(forKey: Constants.zLong) as? Double  {
+        if let lat = UserDefaults.standard.value(forKey: Constants.lat) as? Double ,
+            let long = UserDefaults.standard.value(forKey: Constants.long) as? Double,
+            let zlat = UserDefaults.standard.value(forKey: Constants.zlat) as? Double,
+            let zLong = UserDefaults.standard.value(forKey: Constants.zLong) as? Double
+        {
             
             setMapLocation(latitude: lat, longitude: long, zLatitude: zlat, zLongitude: zLong, mapView: mapView)
         } else {
