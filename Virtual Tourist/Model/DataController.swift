@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class DataController {
+public class DataController {
     
     let persistentContainer: NSPersistentContainer
     
@@ -40,6 +40,31 @@ class DataController {
             self.configureContexts()
             completion?()
         }
+    }
+    
+    
+    func fetch<T>(sortOrderKey: String, ascending: Bool,forType:T, comp: (T) -> ()) {
+         let fetchRequest: NSFetchRequest<Pins> = Pins.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: sortOrderKey, ascending: ascending)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        if let value = try? viewContext.fetch(fetchRequest) {
+            comp(value as! T)
+        }
+    }
+    
+    public func fetchDataWith(sortOrderKey: String, ascending: Bool, entityName: String) -> [NSManagedObject]? {
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: entityName)
+        let sortDescriptor = NSSortDescriptor(key: sortOrderKey, ascending: ascending)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        var data: [NSManagedObject]?
+        do {
+          data = try viewContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("newfetchData - fetchError - \(error.localizedDescription)")
+        }
+        
+        return data
     }
     
     func saved() {

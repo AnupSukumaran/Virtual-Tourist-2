@@ -23,7 +23,18 @@ class TravelLocationsMapViewController: UIViewController {
         super.viewDidLoad()
         EditButton.title = "Edit"
         viewModel.callingInitialMapState(mapView: mapView)
-        viewModel.fetchRequest(mapView: mapView)
+      //  viewModel.fetchRequest(mapView: mapView)
+//        viewModel.dataController.fetch(sortOrderKey: "latitude", ascending: false, forType: [Pins]()) { (data) in
+//
+//           // guard let pins = data as? [Pins] else {return}
+//            viewModel.pins = data
+//            viewModel.createAnnotations(pins: viewModel.pins, mapView: mapView)
+//        }
+        
+        if let pins = viewModel.dataController.fetchDataWith(sortOrderKey: "latitude", ascending: false, entityName: Pins.enitiyName) as? [Pins] {
+            viewModel.pins = pins
+            viewModel.createAnnotations(pins: viewModel.pins, mapView: mapView)
+        }
 
     }
     
@@ -64,3 +75,9 @@ class TravelLocationsMapViewController: UIViewController {
 
 
 
+extension NSObject {
+    
+    static var enitiyName: String {
+        return String(describing: self)
+    }
+}
